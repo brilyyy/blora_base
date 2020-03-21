@@ -79,6 +79,8 @@ class Twitter:
         os.remove(arr[9])
         print("media terupload")
 
+    #pancing
+
 
 
 
