@@ -5,6 +5,7 @@ import _json
 from requests_oauthlib import OAuth1
 import requests
 import os
+from async_upload import VideoTweet
 
 class Twitter:
     def __init__(self):
@@ -33,12 +34,26 @@ class Twitter:
 
                 else:
                     print("dm mengandung media")
-                    attachment = dm[x].message_create['message_data']['attachment']
-                    d = dict(message=message, sender_id=sender_id, id=dm[x].id, media = attachment['media']['media_url'])
-                    dms.append(d)
-                    dms.reverse()
+                    media_type = dm[x].message_create['message_data']['attachment']['media']['type']
+                    print(media_type)
 
-
+                    if media_type == 'photo':
+                        print("medianya foto")
+                        attachment = dm[x].message_create['message_data']['attachment']
+                        d = dict(message = message, sender_id = sender_id, id=dm[x].id,media = attachment['media']['media_url'], shorted_media_url = attachment['media']['url'], type = 'photo')
+                        dms.append(d)
+                        dms.reverse()
+                    elif media_type == 'video':
+                        print("medianya video")
+                        attachment = dm[x].message_create['message_data']['attachment']
+                        media = dm[x].message_create['message_data']['attachment']['media']
+                        media_url = media['video_info']['variants'][0]
+                        video_url = media_url['url']
+                        print("video url "+str(video_url))
+                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media=video_url,
+                                 shorted_media_url=attachment['media']['url'], type='video')
+                        dms.append(d)
+                        dms.reverse()
 
             print(str(len(dms)) +" dikumpulkan")
             time.sleep(60)
@@ -63,22 +78,43 @@ class Twitter:
         self.api.update_status(tweet)
 
     def post_tweet_with_media(self, tweet, media_url):
-        print("mendownload media")
-        arr = str(media_url).split("/")
-        auth = OAuth1(client_key= constants.CONSUMER_KEY,
-                      client_secret= constants.CONSUMER_SECRET,
-                      resource_owner_secret= constants.ACCESS_SECRET,
-                      resource_owner_key= constants.ACCESS_KEY)
-        r = requests.get(media_url, auth = auth)
-        with open(arr[9], 'wb') as f:
-            f.write(r.content)
-        print("media terdownload")
-        tweet = tweet.replace("https://", "")
-        self.api.update_with_media(filename=arr[9], status = tweet)
-        os.remove(arr[9])
-        print("media terupload")
+        try:
+            print("mendownload media")
+            arr = str(media_url).split("/")
+            print(arr[len(arr)-1])
+            if type == 'video':
+                arr = arr[len(arr)-1].split("?tag=1")
+                arr = arr[0]
+            elif type == 'photo':
+                arr = arr[len(arr)-1]
 
-    #pancing
+            auth = OAuth1(client_key= constants.CONSUMER_KEY,
+                          client_secret= constants.CONSUMER_SECRET,
+                          resource_owner_secret= constants.ACCESS_SECRET,
+                          resource_owner_key= constants.ACCESS_KEY)
+            r = requests.get(media_url, auth = auth)
+            with open(arr[9], 'wb') as f:
+                f.write(r.content)
+            print("media terdownload")
+            if shorted_media_url in tweet:
+                print("shorted url "+ str(shorted_media_url))
+                tweet = tweet.replace(shorted_media_url, "")
+            else:
+                print("ga ada")
+
+            if type == 'video':
+                videoTweet = VideoTweet(arr)
+                videoTweet.upload_init()
+                videoTweet.upload_append()
+                videoTweet.upload_finalize()
+                videoTweet.tweet(tweet)
+            elif type == 'photo':
+                self.api.update_with_media(filename=arr, status = tweet)
+            os.remove(arr)
+            print("upload media sukses")
+        except Exception as e:
+            print(e)
+            pass
 
 
 
