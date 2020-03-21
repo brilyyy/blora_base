@@ -32,7 +32,7 @@ def start():
                     else:
                         print("DM akan dihapus karena tidak ada keyword")
                         tw.delete_dm(id)
-                        #hapus dm
+                        #hapus dm pancingan
 
             dms = list()
         else:
