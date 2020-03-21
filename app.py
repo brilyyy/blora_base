@@ -39,6 +39,9 @@ def start():
             print("DM kosong")
             dms = tw.read_dm()
             if len(dms) == 0:
-                time.sleep(30)
+                for i in range(30, 0, -1):
+                    sys.stdout.write(str(i) + ' ')
+                    sys.stdout.flush()
+                    time.sleep(1)
 if __name__ == "__main__":
     start()
