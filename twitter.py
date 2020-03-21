@@ -5,7 +5,6 @@ import _json
 from requests_oauthlib import OAuth1
 import requests
 import os
-import sys
 
 class Twitter:
     def __init__(self):
@@ -42,33 +41,21 @@ class Twitter:
 
 
             print(str(len(dms)) +" dikumpulkan")
-            for i in range(60, 0, -1):
-                sys.stdout.write(str(i) + ' ')
-                sys.stdout.flush()
-                time.sleep(1)
+            time.sleep(60)
             return dms
         except Exception as ex:
             print(ex)
-            for i in range(30, 0, -1):
-                sys.stdout.write(str(i) + ' ')
-                sys.stdout.flush()
-                time.sleep(1)
+            time.sleep(60)
             pass
 
     def delete_dm(self, id):
         print("menghapus dm dengan id "+str(id))
         try:
             self.api.destroy_direct_message(id)
-            for i in range(30, 0, -1):
-                sys.stdout.write(str(i) + ' ')
-                sys.stdout.flush()
-                time.sleep(1)
+            time.sleep(30)
         except Exception as ex:
             print(ex)
-            for i in range(30, 0, -1):
-                sys.stdout.write(str(i) + ' ')
-                sys.stdout.flush()
-                time.sleep(1)
+            time.sleep(30)
             pass
 
     def post_tweet(self, tweet):
