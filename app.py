@@ -15,7 +15,7 @@ def start():
 
                 if len(message) != 0 and len(message) < 280:
                     if "-bfess" in message:
-                        message = message.replace("-bfess", "[𝕭𝖑𝖔𝖗𝖆 𝕱𝖊𝖘𝖘 🌈] ")
+                        message = message.replace("-bfess", "[𝘽𝙡𝙤𝙧𝙖 𝙁𝙚𝙨𝙨] ")
                         if len(message) != 0:
                             if dms[i]['media'] == None:
                                 print("DM akan di post")

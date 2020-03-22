@@ -90,6 +90,8 @@ class Twitter:
                 arr = arr[0]
             elif type == 'photo':
                 arr = arr[len(arr)-1]
+            elif type == 'animated_gif':
+                arr = arr[len(arr)-1]
 
             auth = OAuth1(client_key= constants.CONSUMER_KEY,
                           client_secret= constants.CONSUMER_SECRET,
@@ -113,6 +115,8 @@ class Twitter:
                 videoTweet.upload_finalize()
                 videoTweet.tweet(tweet)
             elif type == 'photo':
+                self.api.update_with_media(filename=arr, status=tweet)
+            elif type == 'animated_gif':
                 self.api.update_with_media(filename=arr, status=tweet)
             os.remove(arr)
             print("upload media sukses")
