@@ -109,7 +109,7 @@ class Twitter:
                 videoTweet.upload_finalize()
                 videoTweet.tweet(tweet)
             elif type == 'photo':
-                self.api.update_with_media(filename=arr, status = tweet)
+                self.api.update_with_media(filename=arr, status=tweet)
             os.remove(arr)
             print("upload media sukses")
         except Exception as e:
