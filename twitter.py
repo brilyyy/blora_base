@@ -77,7 +77,7 @@ class Twitter:
         print("menerbitkan tweet")
         self.api.update_status(tweet)
 
-    def post_tweet_with_media(self, tweet, media_url):
+    def post_tweet_with_media(self, tweet, media_url, shorted_media_url, type):
         try:
             print("mendownload media")
             arr = str(media_url).split("/")
