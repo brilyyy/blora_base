@@ -14,8 +14,8 @@ def start():
                 id = dms[i]['id']
 
                 if len(message) != 0 and len(message) < 280:
-                    if "-blorabase" in message:
-                        message = message.replace("-blorabase", "Blora Base Fess 🌈 ")
+                    if "-bfess" in message:
+                        message = message.replace("-bfess", "[𝕭𝖑𝖔𝖗𝖆 𝕱𝖊𝖘𝖘 🌈] ")
                         if len(message) != 0:
                             if dms[i]['media'] == None:
                                 print("DM akan di post")
@@ -36,7 +36,7 @@ def start():
             dms = list()
 
         else:
-            print("Direct message is empty...")
+            print("DM Kosong")
             dms = tw.read_dm()
             if len(dms) == 0:
                 time.sleep(60)
