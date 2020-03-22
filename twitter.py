@@ -13,6 +13,33 @@ class Twitter:
         self.inits = tweepy.OAuthHandler(constants.CONSUMER_KEY, constants.CONSUMER_SECRET)
         self.inits.set_access_token(constants.ACCESS_KEY, constants.ACCESS_SECRET)
         self.api = tweepy.API(self.inits)
+    def send_dm(self, sender_id):
+        print("mengirim notifikasi ke sender")
+        dms = list()
+        try:
+            api = self.api
+            dm = api.list_direct_messages()
+            for x in range (len(dm)):
+                sender_id = dm[x].message_create['sender_id']
+                api.send_direct_message(recipient_id=sender_id, text = "DMem wes tak posting lur. Cek wae. by 🤖 B_bot 🤖")
+                print("dm terkirim ning "+ sender_id)
+        except Exception as ex:
+            print(ex)
+            pass
+
+    def send_false_dm(self, sender_id):
+        print("mengirim notifikasi ke sender")
+        dms = list()
+        try:
+            api = self.api
+            dm = api.list_direct_messages()
+            for x in range (len(dm)):
+                sender_id = dm[x].message_create['sender_id']
+                api.send_direct_message(recipient_id=sender_id, text = "DMem rung tak posting lur. Hayoooo mesti lali nganggo trigger '-bfess' to? by 🤖 B_bot 🤖")
+                print("dm terkirim ning "+ sender_id)
+        except Exception as ex:
+            print(ex)
+            pass
 
     def read_dm(self):
         print("mendapatkan pesan dm")
@@ -40,6 +67,12 @@ class Twitter:
                         print("medianya foto")
                         attachment = dm[x].message_create['message_data']['attachment']
                         d = dict(message = message, sender_id = sender_id, id=dm[x].id,media = attachment['media']['media_url'], shorted_media_url = attachment['media']['url'], type = 'photo')
+                        dms.append(d)
+                        dms.reverse()
+                    elif media_type == 'animated_gif':
+                        print("medianya foto")
+                        attachment = dm[x].message_create['message_data']['attachment']
+                        d = dict(message = message, sender_id = sender_id, id=dm[x].id,media = attachment['media']['media_url'], shorted_media_url = attachment['media']['url'], type = 'animated_gif')
                         dms.append(d)
                         dms.reverse()
                     elif media_type == 'video':

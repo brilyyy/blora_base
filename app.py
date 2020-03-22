@@ -20,17 +20,20 @@ def start():
                             if dms[i]['media'] == None:
                                 print("DM akan di post")
                                 tw.post_tweet(message)
+                                tw.send_dm(sender_id)
                                 tw.delete_dm(id)
                             else:
                                 print("DM akan di post dengan Media")
                                 print(dms[i]['shorted_media_url'])
                                 tw.post_tweet_with_media(message, dms[i]['media'],dms[i]['shorted_media_url'], dms[i]['type'])
+                                tw.send_dm(sender_id)
                                 tw.delete_dm(id)
                         else:
                             print("DM dihapus karena kosong")
                             tw.delete_dm(id)
                     else:
                         print("DM dihapus krn tidak mengandung keyword")
+                        tw.send_false_dm(sender_id)
                         tw.delete_dm(id)
 
             dms = list()
