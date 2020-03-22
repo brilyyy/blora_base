@@ -13,33 +13,6 @@ class Twitter:
         self.inits = tweepy.OAuthHandler(constants.CONSUMER_KEY, constants.CONSUMER_SECRET)
         self.inits.set_access_token(constants.ACCESS_KEY, constants.ACCESS_SECRET)
         self.api = tweepy.API(self.inits)
-    def send_dm(self, sender_id):
-        print("mengirim notifikasi ke sender")
-        dms = list()
-        try:
-            api = self.api
-            dm = api.list_direct_messages()
-            for x in range (len(dm)):
-                sender_id = dm[x].message_create['sender_id']
-                api.send_direct_message(recipient_id=sender_id, text = "DMem wes tak posting lur. Cek wae. by 🤖 B_bot 🤖")
-                print("dm terkirim ning "+ sender_id)
-        except Exception as ex:
-            print(ex)
-            pass
-
-    def send_false_dm(self, sender_id):
-        print("mengirim notifikasi ke sender")
-        dms = list()
-        try:
-            api = self.api
-            dm = api.list_direct_messages()
-            for x in range (len(dm)):
-                sender_id = dm[x].message_create['sender_id']
-                api.send_direct_message(recipient_id=sender_id, text = "DMem rung tak posting lur. Hayoooo mesti lali nganggo trigger '-bfess' to? by 🤖 B_bot 🤖")
-                print("dm terkirim ning "+ sender_id)
-        except Exception as ex:
-            print(ex)
-            pass
 
     def read_dm(self):
         print("mendapatkan pesan dm")
@@ -98,10 +71,10 @@ class Twitter:
         print("menghapus dm dengan id "+str(id))
         try:
             self.api.destroy_direct_message(id)
-            time.sleep(30)
+            time.sleep(40)
         except Exception as ex:
             print(ex)
-            time.sleep(30)
+            time.sleep(40)
             pass
 
     def post_tweet(self, tweet):
