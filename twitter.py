@@ -28,7 +28,7 @@ class Twitter:
                 print("mendapatkan pesan >>> " +str(message)+" dari id pengirim "+str(sender_id))
                 if "attachment" not in json_data:
                     print("dm tidak mengandung media")
-                    d = dict(message = message, sender_id = sender_id, id = dm[x].id, media = None)
+                    d = dict(message = message, sender_id = sender_id, id = dm[x].id, media = None, shorted_media_url = None)
                     dms.append(d)
                     dms.reverse()
 
@@ -36,7 +36,6 @@ class Twitter:
                     print("dm mengandung media")
                     media_type = dm[x].message_create['message_data']['attachment']['media']['type']
                     print(media_type)
-
                     if media_type == 'photo':
                         print("medianya foto")
                         attachment = dm[x].message_create['message_data']['attachment']
@@ -50,8 +49,7 @@ class Twitter:
                         media_url = media['video_info']['variants'][0]
                         video_url = media_url['url']
                         print("video url "+str(video_url))
-                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media=video_url,
-                                 shorted_media_url=attachment['media']['url'], type='video')
+                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media=video_url, shorted_media_url=attachment['media']['url'], type='video')
                         dms.append(d)
                         dms.reverse()
 
@@ -74,13 +72,18 @@ class Twitter:
             pass
 
     def post_tweet(self, tweet):
-        print("menerbitkan tweet")
-        self.api.update_status(tweet)
+        try:
+            print("menerbitkan tweet")
+            self.api.update_status(tweet)
+        except Exception as ex:
+            print(ex)
+            pass
 
     def post_tweet_with_media(self, tweet, media_url, shorted_media_url, type):
         try:
+            print("shorted url = "+shorted_media_url)
             print("mendownload media")
-            arr = str(media_url).split("/")
+            arr = str(media_url).split('/')
             print(arr[len(arr)-1])
             if type == 'video':
                 arr = arr[len(arr)-1].split("?tag=1")
@@ -93,8 +96,9 @@ class Twitter:
                           resource_owner_secret= constants.ACCESS_SECRET,
                           resource_owner_key= constants.ACCESS_KEY)
             r = requests.get(media_url, auth = auth)
-            with open(arr[9], 'wb') as f:
+            with open(arr, 'wb') as f:
                 f.write(r.content)
+
             print("media terdownload")
             if shorted_media_url in tweet:
                 print("shorted url "+ str(shorted_media_url))
