@@ -115,7 +115,7 @@ class VideoTweet(object):
     def tweet(self, tweet):
         request_data={
             'status' : tweet,
-            'media_id' : self.media_id
+            'media_ids' : self.media_id
         }
         req = requests.post(url=POST_TWEET_URL, data=request_data, auth=oauth)
         print(req.json())
